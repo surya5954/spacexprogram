@@ -11,9 +11,6 @@ export default () => {
 
   return <div>
     <Switch>
-      {/* {routes.map(route => (
-          <Route {...route} />
-        ))} */}
       {renderRoutes(Routes)}
     </Switch>
   </div>

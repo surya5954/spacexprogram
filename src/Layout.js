@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Card from './Components/Card/Card';
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Grid } from '@material-ui/core';
+import { Button, Grid, TextField } from '@material-ui/core';
 import CheckBox from './Components/CheckBox/CheckBox'
 
 // Develop a front-end application which would help users list and browse all launches by SpaceX program.
@@ -47,6 +47,9 @@ const Layout = (props) => {
         launchSuccess: false,
         landSuccess: false,
     });
+    const [yearFilter, setYearFilter] = useState(false);
+
+    const [year, setYear] = useState();
     let [limit, setLimit] = useState(9);
 
     useEffect(() => {
@@ -57,6 +60,9 @@ const Layout = (props) => {
         if (state.launchSuccess) {
             query = query + "&launch_success=true"
         }
+        if (yearFilter) {
+            query = query + "&launch_year=" + year;
+        }
 
         axios.get('https://api.spaceXdata.com/v3/launches' + query)
             .then(function (response) {
@@ -66,7 +72,7 @@ const Layout = (props) => {
             .catch(function (error) {
                 console.log(error);
             })
-    }, [limit, state.launchSuccess, state.landSuccess])
+    }, [limit, state.launchSuccess, state.landSuccess, yearFilter])
 
 
     const fetchMoreData = () => {
@@ -81,9 +87,31 @@ const Layout = (props) => {
         props.history.push('/spacexdetails/' + id);
     }
 
+    const handleYearChange = (evt) => {
+        const val = (evt.target.validity.valid) ? evt.target.value : year;
+        setYear(val);
+    }
+    const applyYearFilter = () => {
+        console.log()
+        if (year < 2021 && year > 1900) {
+            setYearFilter(true);
+        } else {
+            alert("Please Enter the year between 1900 to 2021");
+        }
+    }
     return (
         <div>
-            <CheckBox handleFilterChange={handleFilterChange} state />
+            <Grid container>
+                <Grid item xs={6}>
+                    <CheckBox handleFilterChange={handleFilterChange} state />
+                </Grid>
+                <Grid item xs={6}>
+
+                    <TextField style={{ top: 40 }} label="Fill Year" variant="outlined" type="text" pattern="[0-9]*" onInput={handleYearChange} value={year} />
+                    <Button style={{ top: 40, margin: 10 }} variant="contained" color="primary" onClick={applyYearFilter}>Apply Year Filter</Button>
+                </Grid>
+            </Grid>
+
             <InfiniteScroll
                 dataLength={data.length}
                 next={fetchMoreData}

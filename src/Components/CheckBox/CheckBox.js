@@ -41,7 +41,7 @@ export default function CheckboxesGroup({ handleFilterChange, state }) {
                         label="Land Success"
                     />
                 </FormGroup>
-                <FormHelperText>Be careful</FormHelperText>
+                <FormHelperText>Select Checkbox to Apply Filter</FormHelperText>
             </FormControl>
         </div>
     );
