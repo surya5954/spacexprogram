@@ -8,3 +8,6 @@ npm install
 npm run dev
 
 ```
+
+- Server is running on 3006
+- Hit http://localhost:3006 from browser.
